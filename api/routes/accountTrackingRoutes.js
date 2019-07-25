@@ -19,6 +19,10 @@ module.exports = function(app) {
     app.route('/summary')
         .get(controller.groupByCategory);
 
+    app.route('/balance')
+        .get(controller.showBalance);
+
+
 //   app.route('/tasks')
 //     .get(todoList.list_all_tasks)
 //     .post(todoList.create_a_task);

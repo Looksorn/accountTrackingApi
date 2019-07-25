@@ -174,6 +174,18 @@ exports.groupByCategory = function(req, res) {
 //     });
 // };
 
+exports.showBalance = function(req, res) {
+    User.findOne({
+        userAccountNo: "0123456789"
+    }, function(err, trans) {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(trans);
+        }
+    });
+};
+
 function totalAmountByType(trans,type,userID) {
     var total = 0;
     for (var i = 0; i < trans.length; i++) {
