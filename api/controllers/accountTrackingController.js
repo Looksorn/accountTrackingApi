@@ -108,6 +108,14 @@ exports.createTransaction = function(req, res) {
     });
 };
 
+exports.editTransaction = function(req, res) {
+    Trans.findOneAndUpdate({_id: req.params.Id}, req.body, {new: true}, function(err, trans) {
+        if (err)
+            res.send(err);
+        res.json(trans);
+    });
+};
+
 exports.deleteTransaction = function(req, res) {
     Trans.deleteOne({
       _id: req.params.ID
@@ -155,14 +163,6 @@ exports.groupByCategory = function(req, res) {
         }
     )
 };
-
-// exports.update_a_task = function(req, res) {
-//     Task.findOneAndUpdate({_id: req.params.taskId}, req.body, {new: true}, function(err, task) {
-//       if (err)
-//         res.send(err);
-//       res.json(task);
-//     });
-//   };
 
 // exports.delete_a_task = function(req, res) {
 //     Task.remove({

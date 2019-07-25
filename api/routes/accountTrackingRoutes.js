@@ -8,6 +8,7 @@ module.exports = function(app) {
 
     app.route('/transaction/id/:Id')
         .get(controller.showTransactionById)
+        .put(controller.editTransaction)
         .delete(controller.deleteTransaction);
 
     app.route('/transaction/recent')
