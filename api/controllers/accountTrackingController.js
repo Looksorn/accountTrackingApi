@@ -1,7 +1,8 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Trans = mongoose.model('Transaction');
+    Trans = mongoose.model('Transaction'),
+    User = mongoose.model('User');
 
 exports.showTransaction = function(req, res){
     // console.log("Body: "+JSON.stringify(req.body));
@@ -66,11 +67,13 @@ exports.createTransaction = function(req, res) {
     // res.write(JSON.stringify(responseBody));
     // res.end();
 
+    // var date = new Date(req.body.transactionDateandTime);
     var transData = {
         transactionId: req.body.transactionId,
         transactionDateandTime: new Date(req.body.transactionDateandTime),
         payerAccountNumber: req.body.payerAccountNumber,
         payeeAccountNumber: req.body.payeeAccountNumber,
+        type: null,
         totalAmount: Number(req.body.amount),
         type: "expense",
         categories: [{
@@ -113,14 +116,22 @@ exports.deleteTransaction = function(req, res) {
 };
 
 exports.groupByCategory = function(req, res) {
+    var d = new Date();
+    var n = d.getMonth();
     Trans.aggregate(
         [
             {
                 $project: {
                     _id: 0,
                     categories: 1,
-                    type: 1
+                    type: 1,
+                    month: { $month: "$transactionDateandTime" }
                 }
+            },
+            { 
+                $match : { 
+                    month : n+1
+                } 
             },
             {
                 $unwind: "$categories"
@@ -128,6 +139,7 @@ exports.groupByCategory = function(req, res) {
             {
                 $group: {
                     _id: "$categories.category",
+                    "type": { "$first": "$type" },
                     sum: { $sum: "$categories.amount"},
                 }
             }
