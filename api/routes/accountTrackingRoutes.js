@@ -3,8 +3,11 @@ module.exports = function(app) {
   var controller = require('../controllers/accountTrackingController');
 
     app.route('/transaction')
-        .get(controller.list_transaction)
-        .post(controller.create_transaction);
+        .get(controller.showTransaction)
+        .post(controller.createTransaction);
+
+    app.route('/transaction/:ID')
+        .delete(controller.deleteTransaction);
 
 //   app.route('/tasks')
 //     .get(todoList.list_all_tasks)

@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     Trans = mongoose.model('Transaction');
 
-exports.list_transaction = function(req, res){
+exports.showTransaction = function(req, res){
     console.log("Body: "+JSON.stringify(req.body));
     Trans.find({}, function(err, trans) {
         if (err){
@@ -14,7 +14,7 @@ exports.list_transaction = function(req, res){
     });
 };
 
-exports.create_transaction = function(req, res) {
+exports.createTransaction = function(req, res) {
     // const {headers, method, url} = req;
     // const body = req.body
 
@@ -59,6 +59,16 @@ exports.create_transaction = function(req, res) {
     });
 };
 
+exports.deleteTransaction = function(req, res) {
+    Trans.remove({
+      _id: req.params.ID
+    }, function(err, trans) {
+      if (err)
+        res.send(err);
+      res.json({ message: 'Transaction successfully deleted' });
+    });
+};
+
 // exports.list_all_tasks = function(req, res) {
 //   Task.find({}, function(err, task) {
 //     if (err)
@@ -91,7 +101,7 @@ exports.create_transaction = function(req, res) {
 //       res.json(task);
 //     });
 //   };
-  
+
 // exports.delete_a_task = function(req, res) {
 //     Task.remove({
 //       _id: req.params.taskId
