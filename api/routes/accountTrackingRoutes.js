@@ -9,9 +9,6 @@ module.exports = function(app) {
     app.route('/transaction/:ID')
         .delete(controller.deleteTransaction);
 
-    app.route('/record')
-        .get(controller.showRecord);
-
 //   app.route('/tasks')
 //     .get(todoList.list_all_tasks)
 //     .post(todoList.create_a_task);
