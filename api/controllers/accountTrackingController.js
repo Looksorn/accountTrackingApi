@@ -23,34 +23,31 @@ exports.showTransactionById = function(req, res){
 };
 
 exports.showRecentTransaction = function(req, res){
-    // console.log("Params: "+JSON.stringify(req.params));
-    Trans.find({
-        transactionDateandTime: {
-            $gte: new Date(req.params.Date),
-            $lte: new Date(req.params.Date+"T23:59:59.999Z")
-        },
-    }, function(err, trans) {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(trans);
-        }
+    Trans.find({})
+        .sort({'transactionDateandTime': -1})
+        .limit(1)
+        .exec(function(err, trans) {
+            if (err){
+                res.send(err);
+            }else{
+                res.json(trans);
+            }
     });
 };
 
 exports.showTransactionByDate = function(req, res){
-    // console.log("Params: "+JSON.stringify(req.params));
     Trans.find({
         transactionDateandTime: {
             $gte: new Date(req.params.Date),
             $lte: new Date(req.params.Date+"T23:59:59.999Z")
-        }
-    }, function(err, trans) {
-        if (err){
-            res.send(err);
-        }else{
-            res.json(trans);
-        }
+        }})
+        .sort({'transactionDateandTime': -1})
+        .exec(function(err, trans) {
+            if (err){
+                res.send(err);
+            }else{
+                res.json(trans);
+            }
     });
 };
 
@@ -115,13 +112,31 @@ exports.deleteTransaction = function(req, res) {
 };
 
 exports.groupByCategory = function(req, res) {
-    // Trans.remove({
-    //   _id: req.params.ID
-    // }, function(err, trans) {
-    //   if (err)
-    //     res.send(err);
-    //   res.json({ message: 'Transaction successfully deleted' });
-    // });
+    Trans.aggregate(
+        [
+            {
+                $project: {
+                    _id: 0,
+                    categories: 1
+                }
+            },
+            {
+                $unwind: "$categories"
+            },
+            {
+                $group: {
+                    _id: "$categories.category",
+                    sum: { $sum: "$amount"},
+                }
+            }
+        ],
+        function(err,results) {
+            if (err) throw err;
+            // return results;
+            res.json(results);
+            console.log(results);
+        }
+    )
 };
 
 // exports.list_all_tasks = function(req, res) {
