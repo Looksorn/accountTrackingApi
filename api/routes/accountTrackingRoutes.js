@@ -7,7 +7,11 @@ module.exports = function(app) {
         .post(controller.createTransaction);
 
     app.route('/transaction/:ID')
+        // .get(controller.showTransactionById)
         .delete(controller.deleteTransaction);
+
+    app.route('/transaction/:date')
+        .get(controller.showTransactionByDate);
 
 //   app.route('/tasks')
 //     .get(todoList.list_all_tasks)

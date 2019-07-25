@@ -14,6 +14,17 @@ exports.showTransaction = function(req, res){
     });
 };
 
+exports.showTransactionByDate = function(req, res){
+    console.log("Body: "+JSON.stringify(req.body));
+    Trans.find({}, function(err, trans) {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(trans);
+        }
+    });
+};
+
 exports.createTransaction = function(req, res) {
     // const {headers, method, url} = req;
     // const body = req.body

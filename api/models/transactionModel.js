@@ -28,6 +28,10 @@ var TransSchema = new Schema({
         type: String,
         required: true
     },
+    type: {
+        type: String,
+        enum: ['expense', 'income']
+    },
     totalAmount: {
         type: Number,
         required: true
