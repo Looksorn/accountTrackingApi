@@ -117,12 +117,12 @@ exports.editTransaction = function(req, res) {
 };
 
 exports.deleteTransaction = function(req, res) {
-    Trans.deleteOne({
-      _id: req.params.ID
+    Trans.findOneAndDelete({
+        _id: req.params.Id
     }, function(err, trans) {
-      if (err)
-        res.send(err);
-      res.json({ message: 'Transaction successfully deleted' });
+        if (err)
+            res.send(err);
+        res.json({ message: 'Transaction successfully deleted' });
     });
 };
 
