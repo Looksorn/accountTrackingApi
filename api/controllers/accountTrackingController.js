@@ -117,7 +117,8 @@ exports.groupByCategory = function(req, res) {
             {
                 $project: {
                     _id: 0,
-                    categories: 1
+                    categories: 1,
+                    type: 1
                 }
             },
             {
@@ -126,7 +127,7 @@ exports.groupByCategory = function(req, res) {
             {
                 $group: {
                     _id: "$categories.category",
-                    sum: { $sum: "$amount"},
+                    sum: { $sum: "$categories.amount"},
                 }
             }
         ],
