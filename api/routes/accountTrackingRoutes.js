@@ -6,11 +6,11 @@ module.exports = function(app) {
         .get(controller.showTransaction)
         .post(controller.createTransaction);
 
-    app.route('/transaction/:ID')
-        // .get(controller.showTransactionById)
+    app.route('/transaction/id/:Id')
+        .get(controller.showTransactionById)
         .delete(controller.deleteTransaction);
 
-    app.route('/transaction/:date')
+    app.route('/transaction/date/:Date')
         .get(controller.showTransactionByDate);
 
 //   app.route('/tasks')

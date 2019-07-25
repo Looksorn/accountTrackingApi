@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
     Trans = mongoose.model('Transaction');
 
 exports.showTransaction = function(req, res){
-    console.log("Body: "+JSON.stringify(req.body));
+    // console.log("Body: "+JSON.stringify(req.body));
     Trans.find({}, function(err, trans) {
         if (err){
             res.send(err);
@@ -14,9 +14,22 @@ exports.showTransaction = function(req, res){
     });
 };
 
+exports.showTransactionById = function(req, res){
+    Trans.findById(req.params.Id, function(err, trans) {
+      if (err)
+        res.send(err);
+      res.json(trans);
+    });
+};
+
 exports.showTransactionByDate = function(req, res){
-    console.log("Body: "+JSON.stringify(req.body));
-    Trans.find({}, function(err, trans) {
+    // console.log("Params: "+JSON.stringify(req.params));
+    Trans.find({
+        transactionDateandTime: {
+            $gte: new Date(req.params.Date),
+            $lte: new Date(req.params.Date+"T23:59:59.999Z")
+        }
+    }, function(err, trans) {
         if (err){
             res.send(err);
         }else{
