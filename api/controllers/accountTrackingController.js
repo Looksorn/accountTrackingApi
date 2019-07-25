@@ -94,6 +94,7 @@ exports.createTransaction = function(req, res) {
         console.log("send trans")
         // res.json(trans);
         console.log(trans);
+        updateBalance(req.body.payerAccountNumber,req.body.transactionDateandTime);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.write(JSON.stringify(trans));
@@ -182,3 +183,45 @@ exports.groupByCategory = function(req, res) {
 //       res.json({ message: 'Task successfully deleted' });
 //     });
 // };
+
+function totalAmountByType(trans,type,userID) {
+    var total = 0;
+    for (var i = 0; i < trans.length; i++) {
+        for (var j = 0; j < trans[i]['categories'].length; j++) {
+            if(trans[i]['payerAccountNumber']==userID&&trans[i]['type']==type)
+            total += trans[i]['categories'][j].amount
+        }
+    }
+    return total
+}
+
+function updateBalance(userID,date)  {
+    Trans.find({}, function(err, trans) {
+
+        var balance = totalAmountByType(trans,'income',userID)-totalAmountByType(trans,'expense',userID)
+        var userData = {
+            userAccountNo: userID,
+            balance: balance,        
+            updateTime: date
+        }
+        console.log(userData)
+        User.findOne({ userAccountNo: userID }, async function(err, user) {
+            if (err){
+                return err;
+            }else{
+                console.log("test"+ user);
+                var new_user = new User(userData);
+                if(!user){
+                    new_user.save();
+                }
+                else{
+                    new_user._id = user._id
+                    console.log("test2"+ new_user);
+                    await User.remove({ _id: user._id });
+                    await new_user.save();
+                }
+
+            }
+        })
+    });
+}
