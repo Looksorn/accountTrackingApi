@@ -67,10 +67,13 @@ exports.createTransaction = function(req, res) {
     // res.write(JSON.stringify(responseBody));
     // res.end();
 
-    // var date = new Date(req.body.transactionDateandTime);
+    var utc = new Date(req.body.transactionDateandTime);
+    utc.setHours( utc.getHours() + 7);
+    console.log(utc);
+
     var transData = {
         transactionId: req.body.transactionId,
-        transactionDateandTime: new Date(req.body.transactionDateandTime),
+        transactionDateandTime: utc,
         payerAccountNumber: req.body.payerAccountNumber,
         payeeAccountNumber: req.body.payeeAccountNumber,
         type: null,
