@@ -1,0 +1,103 @@
+'use strict';
+
+var mongoose = require('mongoose'),
+    Trans = mongoose.model('Transaction');
+
+exports.list_transaction = function(req, res){
+    console.log("Body: "+JSON.stringify(req.body));
+    Trans.find({}, function(err, trans) {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(trans);
+        }
+    });
+};
+
+exports.create_transaction = function(req, res) {
+    // const {headers, method, url} = req;
+    // const body = req.body
+
+    // console.log("Header: "+JSON.stringify(headers));
+    // console.log("Method: "+method);
+    // console.log("URL: "+url);
+    console.log("Body: "+JSON.stringify(req.body));
+
+    // res.statusCode = 200;
+    // res.setHeader('Content-Type', 'application/json');
+    // const responseBody = { headers, method, url, body };
+    // res.write(JSON.stringify(responseBody));
+    // res.end();
+
+    var data = {
+        transactionId: req.body.transactionId,
+        transactionDateandTime: new Date(req.body.transactionDateandTime),
+        payerAccountNumber: req.body.payerAccountNumber,
+        payeeAccountNumber: req.body.payeeAccountNumber,
+        amount: Number(req.body.amount),
+        category: req.body.billPaymentRef1.toLowerCase()
+    }
+
+    var new_trans = new Trans(data);
+    var error = new_trans.validateSync();
+    if(error.errors['category']){
+        // console.log("category is null");
+        new_trans.category = "others";
+    }
+    new_trans.save(function(err, trans) {
+        if (err){
+            // console.log("send err");
+            res.send(err);
+        }
+        console.log("send trans")
+        // res.json(trans);
+        console.log(trans);
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.write(JSON.stringify(trans));
+        res.end();
+    });
+};
+
+// exports.list_all_tasks = function(req, res) {
+//   Task.find({}, function(err, task) {
+//     if (err)
+//       res.send(err);
+//     res.json(task);
+//   });
+// };
+
+// exports.create_a_task = function(req, res) {
+//   var new_task = new Task(req.body);
+//   new_task.save(function(err, task) {
+//     if (err)
+//       res.send(err);
+//     res.json(task);
+//   });
+// };
+
+// exports.read_a_task = function(req, res) {
+//     Task.findById(req.params.taskId, function(err, task) {
+//       if (err)
+//         res.send(err);
+//       res.json(task);
+//     });
+//   };
+  
+// exports.update_a_task = function(req, res) {
+//     Task.findOneAndUpdate({_id: req.params.taskId}, req.body, {new: true}, function(err, task) {
+//       if (err)
+//         res.send(err);
+//       res.json(task);
+//     });
+//   };
+  
+// exports.delete_a_task = function(req, res) {
+//     Task.remove({
+//       _id: req.params.taskId
+//     }, function(err, task) {
+//       if (err)
+//         res.send(err);
+//       res.json({ message: 'Task successfully deleted' });
+//     });
+// };
