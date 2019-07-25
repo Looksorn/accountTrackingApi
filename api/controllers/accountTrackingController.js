@@ -175,6 +175,44 @@ exports.showBalance = function(req, res) {
     });
 };
 
+exports.getIncomeExpense = function(req, res) {
+    var d = new Date();
+    var n = d.getMonth();
+    Trans.aggregate(
+        [
+            {
+                $project: {
+                    _id: 0,
+                    categories: 1,
+                    type: 1,
+                    month: { $month: "$transactionDateandTime" }
+                }
+            },
+            { 
+                $match : { 
+                    month : n+1
+                } 
+            },
+            {
+                $unwind: "$categories"
+            },
+            {
+                $group: {
+                    _id: "$type",
+                    sum: { $sum: "$categories.amount"},
+                }
+            }
+        ],
+        function(err,results) {
+            if (err) throw err;
+            // return results;
+            res.json(results);
+            console.log(results);
+        }
+    )
+};
+
+
 function totalAmountByType(trans,type,userID) {
     var total = 0;
     for (var i = 0; i < trans.length; i++) {

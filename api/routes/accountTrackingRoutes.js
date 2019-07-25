@@ -20,6 +20,9 @@ module.exports = function(app) {
     app.route('/summary')
         .get(controller.groupByCategory);
 
+    app.route('/inex')
+        .get(controller.getIncomeExpense);
+
     app.route('/balance')
         .get(controller.showBalance);
 };
