@@ -3,7 +3,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var CategorySchema = new Schema({
-    category: String,
+    category: {
+        type: String,
+        enum: ['shopping', 'food', 'transportation', 'entertainment', 'health', 'bill', 'salary', 'gift', 'others']
+    },
     tag: String,
     amount: Number
 });

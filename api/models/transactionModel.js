@@ -2,6 +2,15 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var CategorySchema = new Schema({
+    category: {
+        type: String,
+        enum: ['shopping', 'food', 'transportation', 'entertainment', 'health', 'bill', 'salary', 'gift', 'others']
+    },
+    tag: String,
+    amount: Number
+});
+
 var TransSchema = new Schema({
     transactionId: {
         type: String,
@@ -19,15 +28,11 @@ var TransSchema = new Schema({
         type: String,
         required: true
     },
-    amount: {
+    totalAmount: {
         type: Number,
         required: true
     },
-    category: {
-        type: String,
-        enum: ['shopping', 'food', 'transportation', 'entertainment', 'health', 'bill', 'salary', 'gift', 'others'],
-        default: 'others'
-    }
+    categories: [CategorySchema]
 });
 
 module.exports = mongoose.model('Transaction', TransSchema);
