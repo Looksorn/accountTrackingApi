@@ -22,6 +22,22 @@ exports.showTransactionById = function(req, res){
     });
 };
 
+exports.showRecentTransaction = function(req, res){
+    // console.log("Params: "+JSON.stringify(req.params));
+    Trans.find({
+        transactionDateandTime: {
+            $gte: new Date(req.params.Date),
+            $lte: new Date(req.params.Date+"T23:59:59.999Z")
+        },
+    }, function(err, trans) {
+        if (err){
+            res.send(err);
+        }else{
+            res.json(trans);
+        }
+    });
+};
+
 exports.showTransactionByDate = function(req, res){
     // console.log("Params: "+JSON.stringify(req.params));
     Trans.find({
@@ -59,6 +75,7 @@ exports.createTransaction = function(req, res) {
         payerAccountNumber: req.body.payerAccountNumber,
         payeeAccountNumber: req.body.payeeAccountNumber,
         totalAmount: Number(req.body.amount),
+        type: "expense",
         categories: [{
             category: req.body.billPaymentRef1.toLowerCase(),
             amount: Number(req.body.amount)
@@ -88,13 +105,23 @@ exports.createTransaction = function(req, res) {
 };
 
 exports.deleteTransaction = function(req, res) {
-    Trans.remove({
+    Trans.deleteOne({
       _id: req.params.ID
     }, function(err, trans) {
       if (err)
         res.send(err);
       res.json({ message: 'Transaction successfully deleted' });
     });
+};
+
+exports.groupByCategory = function(req, res) {
+    // Trans.remove({
+    //   _id: req.params.ID
+    // }, function(err, trans) {
+    //   if (err)
+    //     res.send(err);
+    //   res.json({ message: 'Transaction successfully deleted' });
+    // });
 };
 
 // exports.list_all_tasks = function(req, res) {

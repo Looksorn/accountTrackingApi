@@ -10,8 +10,14 @@ module.exports = function(app) {
         .get(controller.showTransactionById)
         .delete(controller.deleteTransaction);
 
+    app.route('/transaction/recent')
+        .get(controller.showRecentTransaction);
+
     app.route('/transaction/date/:Date')
         .get(controller.showTransactionByDate);
+
+    app.route('/summary')
+        .get(controller.groupByCategory);
 
 //   app.route('/tasks')
 //     .get(todoList.list_all_tasks)
