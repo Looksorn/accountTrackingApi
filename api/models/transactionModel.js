@@ -2,10 +2,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const moment = require('moment-timezone');
-const dateThailand = moment.tz(Date.now(), "Asia/Bangkok");
+// const moment = require('moment-timezone');
+// const dateThailand = moment.tz(Date.now(), "Asia/Bangkok");
 
-console.log(dateThailand);
+// console.log(dateThailand);
 
 var CategorySchema = new Schema({
     category: {
@@ -23,7 +23,7 @@ var TransSchema = new Schema({
     },
     transactionDateandTime: {
         type: Date,
-        default: dateThailand
+        // default: dateThailand
     },
     payerAccountNumber: {
         type: String,
