@@ -5,7 +5,6 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User');
 
 exports.showTransaction = function(req, res){
-    // console.log("Body: "+JSON.stringify(req.body));
     Trans.find({}, function(err, trans) {
         if (err){
             res.send(err);
@@ -163,16 +162,6 @@ exports.groupByCategory = function(req, res) {
         }
     )
 };
-
-// exports.delete_a_task = function(req, res) {
-//     Task.remove({
-//       _id: req.params.taskId
-//     }, function(err, task) {
-//       if (err)
-//         res.send(err);
-//       res.json({ message: 'Task successfully deleted' });
-//     });
-// };
 
 exports.showBalance = function(req, res) {
     User.findOne({
