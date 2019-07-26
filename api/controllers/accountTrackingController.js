@@ -217,7 +217,7 @@ function totalAmountByType(trans,type,userID) {
     var total = 0;
     for (var i = 0; i < trans.length; i++) {
         for (var j = 0; j < trans[i]['categories'].length; j++) {
-            if(trans[i]['payerAccountNumber']==userID&&trans[i]['type']==type)
+            if(trans[i]['payerAccountNumber']==userID&&trans[i]['type']==type||trans[i]['payeeAccountNumber']==userID&&trans[i]['type']==type)
             total += trans[i]['categories'][j].amount
         }
     }
