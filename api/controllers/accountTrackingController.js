@@ -148,8 +148,8 @@ exports.groupByCategory = function(req, res) {
             },
             {
                 $group: {
-                    _id: "$categories.category",
-                    "type": { "$first": "$type" },
+                    _id: {type: "$type", category:"$categories.category"},
+                    // "type": { "$first": "$type" },
                     sum: { $sum: "$categories.amount"},
                 }
             }
@@ -183,8 +183,9 @@ exports.getIncomeExpense = function(req, res) {
             {
                 $project: {
                     _id: 0,
-                    categories: 1,
+                    // categories: 1,
                     type: 1,
+                    totalAmount: 1,
                     month: { $month: "$transactionDateandTime" }
                 }
             },
@@ -193,13 +194,13 @@ exports.getIncomeExpense = function(req, res) {
                     month : n+1
                 } 
             },
-            {
-                $unwind: "$categories"
-            },
+            // {
+            //     $unwind: "$categories"
+            // },
             {
                 $group: {
                     _id: "$type",
-                    sum: { $sum: "$categories.amount"},
+                    sum: { $sum: "$totalAmount"},
                 }
             }
         ],
